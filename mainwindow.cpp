@@ -63,8 +63,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->widget, &MultiLayerSelector::signalChildClicked, [=](QVariant data) {
         qInfo() << "signalChildClicked:" << data;
     });
-    connect(ui->widget, &MultiLayerSelector::signalPathClicked, [=](QList<QVariant> data) {
-        qInfo() << "signalPathClicked:" << data;
+    connect(ui->widget, &MultiLayerSelector::signalPathDataClicked, [=](QList<QVariant> data) {
+        qInfo() << "signalPathDataClicked:" << data;
     });
     connect(ui->widget, &MultiLayerSelector::signalPathIndexClicked, [=](QList<int> data) {
         qInfo() << "signalPathIndexClicked:" << data;

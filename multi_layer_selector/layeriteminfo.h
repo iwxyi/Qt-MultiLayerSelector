@@ -67,6 +67,15 @@ public:
     {
         return m_current_index;
     }
+    
+    int currentValidIndex()
+    {
+        if (m_sub_items.size() == 0)
+            return -1;
+        if (m_current_index < 0 || m_current_index >= m_sub_items.size())
+            m_current_index = 0;
+        return m_current_index;
+    }
 
     QList<LayerItemInfo *> subItems() const
     {
