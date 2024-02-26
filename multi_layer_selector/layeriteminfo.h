@@ -58,6 +58,8 @@ public:
 
     QVariant data() const
     {
+        if (m_data.isNull())
+            return m_title;
         return m_data;
     }
 

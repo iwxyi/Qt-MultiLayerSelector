@@ -1,6 +1,8 @@
 #include "multilayerselector.h"
 #include <QDebug>
-#define MULTI_LAYER_SELECTOR_DEBUG if (1) qDebug()
+#define MULTI_LAYER_SELECTOR_DEBUG \
+    if (1)                         \
+    qDebug()
 
 MultiLayerSelector::MultiLayerSelector(QWidget *parent) : QWidget(parent)
 {
@@ -78,13 +80,46 @@ void MultiLayerSelector::setSubItem(int level, LayerItemInfo *parent)
 
         // 控件的事件
         connect(button, &InteractiveButtonBase::signalMouseEnter, this, [=]()
-                {
-            // 切换到这个index
-            setLayerCurrentIndex(level, i); });
+                { setLayerCurrentIndex(level, i); });
         connect(button, &InteractiveButtonBase::clicked, this, [=]()
                 {
-            // 切换到这个index
-            setLayerCurrentIndex(level, i); });
+                    // 切换到这个index，用来适配不支持鼠标移动的情况
+                    setLayerCurrentIndex(level, i);
+
+                    // 发送信号
+                    emit signalItemClicked(sub_item->data());
+                    
+                    if (sub_item->hasSubItems())
+                    {
+                        emit signalGroupClicked(sub_item->data());
+                    }
+                    else
+                    {
+                        emit signalChildClicked(sub_item->data());
+                    }
+                    
+                    QList<QVariant> path;
+                    LayerItemInfo *temp = sub_item;
+                    while (temp != nullptr)
+                    {
+                        path.prepend(temp->data());
+                        temp = temp->parent();
+                    }
+                    if (path.size() > 0)
+                    {
+                        path.removeFirst();
+                    }
+                    emit signalPathClicked(path);
+                    
+                    QList<int> path_index;
+                    temp = sub_item->parent();
+                    while (temp != nullptr)
+                    {
+                        path_index.prepend(temp->currentIndex());
+                        temp = temp->parent();
+                    }
+                    emit signalPathIndexClicked(path_index);
+                });
     }
 
     // 加载下一级
@@ -130,7 +165,7 @@ void MultiLayerSelector::setLayerCurrentIndex(int level, int index)
 
     LayerItemInfo *data = getLayerItem(0, m_data_root, level, -1);
     data->setCurrentIndex(index);
-    
+
     // 设置下一级的数据
     setSubItem(level + 1, data->currentSubItem());
 }

@@ -16,6 +16,11 @@ public:
     void setData(LayerItemInfo *data);
 
 signals:
+    void signalItemClicked(QVariant data); // 所有item点击
+    void signalGroupClicked(QVariant data); // 仅分组
+    void signalChildClicked(QVariant data); // 仅子项
+    void signalPathClicked(QList<QVariant> data); // 所有item的路径（不包括root）的data
+    void signalPathIndexClicked(QList<int> data); // 所有item的路径的index
 
 public slots:
 

@@ -53,6 +53,22 @@ MainWindow::MainWindow(QWidget *parent)
     root->setCurrentIndex(0);
     
     ui->widget->setData(root);
+    
+    connect(ui->widget, &MultiLayerSelector::signalItemClicked, [=](QVariant data) {
+        qInfo() << "signalItemClicked:" << data;
+    });
+    connect(ui->widget, &MultiLayerSelector::signalGroupClicked, [=](QVariant data) {
+        qInfo() << "signalGroupClicked:" << data;
+    });
+    connect(ui->widget, &MultiLayerSelector::signalChildClicked, [=](QVariant data) {
+        qInfo() << "signalChildClicked:" << data;
+    });
+    connect(ui->widget, &MultiLayerSelector::signalPathClicked, [=](QList<QVariant> data) {
+        qInfo() << "signalPathClicked:" << data;
+    });
+    connect(ui->widget, &MultiLayerSelector::signalPathIndexClicked, [=](QList<int> data) {
+        qInfo() << "signalPathIndexClicked:" << data;
+    });
 }
 
 MainWindow::~MainWindow()
